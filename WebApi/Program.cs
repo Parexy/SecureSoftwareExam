@@ -1,16 +1,22 @@
+using PatientJournal.Core.Entities;
+using PatientJournal.Core.Interfaces;
+using PatientJournal.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using PatientJournal.Infrastructure.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-/*builder.Services.AddDbContext<WebshopContext>(opt => 
-    opt.UseInMemoryDatabase("WebshopDb"));
+builder.Services.AddDbContext<PatientJournalContext>(opt => 
+    opt.UseInMemoryDatabase("WebAppDb"));
 
-builder.Services.AddScoped<IRepository<Item>, ItemRepository>();
-builder.Services.AddScoped<IRepository<Cart>, CartRepository>();
-builder.Services.AddScoped<IRepository<Order>, OrderRepository>();
-builder.Services.AddScoped<IItemManager, ItemManager>();
-builder.Services.AddScoped<ICartManager, CartManager>();
-builder.Services.AddScoped<IOrderManager, OrderManager>();
-builder.Services.AddTransient<IDbInitializer, DbInitializer>();*/
+builder.Services.AddScoped<IRepository<AuditLog>, Repository<AuditLog>>();
+builder.Services.AddScoped<IRepository<JournalEntry>, Repository<JournalEntry>>();
+builder.Services.AddScoped<IRepository<Patient>, Repository<Patient>>();
+builder.Services.AddScoped<IRepository<PatientDocument>, Repository<PatientDocument>>();
+builder.Services.AddScoped<IRepository<StaffMember>, Repository<StaffMember>>();
+//builder.Services.AddScoped<IItemManager, ItemManager>();
+builder.Services.AddTransient<DbInitializer, DbInitializer>();
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -24,13 +30,13 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 
     // Initialize the database.
-    /*using (var scope = app.Services.CreateScope())
+    using (var scope = app.Services.CreateScope())
     {
         var services = scope.ServiceProvider;
-        var dbContext = services.GetRequiredService<WebshopContext>();
+        var dbContext = services.GetRequiredService<PatientJournalContext>();
         var dbInitializer = services.GetRequiredService<IDbInitializer>();
-        dbInitializer.Initialize(dbContext);
-    }*/
+        await dbInitializer.InitializeAsync();
+    }
 }
 
 app.UseHttpsRedirection();
