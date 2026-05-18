@@ -4,6 +4,9 @@ public class Patient
 {
     public int Id { get; set; }
 
+    // Keycloak user id
+    public string ExternalUserId { get; set; } = string.Empty;
+
     public string CPRNumber { get; set; } = string.Empty;
 
     public string Name { get; set; } = string.Empty;
