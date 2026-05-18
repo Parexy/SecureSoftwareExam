@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace WebApi.Controllers;
+namespace WebApp.Controllers;
 
 [Route("[controller]")]
 public class AccountController : Controller
@@ -36,7 +36,21 @@ public class AccountController : Controller
     [AllowAnonymous]
     public IActionResult AccessDenied()
     {
-        return Content("Access denied. You do not have permission to access this resource.");
+        return Content("Access denied.");
+    }
+
+    [HttpGet("Token")]
+    [Authorize]
+    public async Task<IActionResult> Token()
+    {
+        var accessToken = await HttpContext.GetTokenAsync("access_token");
+        var idToken = await HttpContext.GetTokenAsync("id_token");
+
+        return Ok(new
+        {
+            AccessToken = accessToken,
+            IdToken = idToken
+        });
     }
 
     [HttpGet("UserInfo")]
