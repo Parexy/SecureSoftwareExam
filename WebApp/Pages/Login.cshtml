@@ -1,0 +1,65 @@
+@page
+@model WebApp.Pages.LoginModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-5">
+
+        <h1 class="mb-4">Login</h1>
+
+        <div id="error" class="alert alert-danger d-none"></div>
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+
+                <div class="mb-3">
+                    <label>Username</label>
+                    <input id="username" class="form-control" placeholder="Enter username" />
+                </div>
+
+                <div class="mb-4">
+                    <label>Password</label>
+                    <input id="password" type="password" class="form-control" placeholder="Enter password" />
+                </div>
+
+                <button class="btn btn-primary w-100" onclick="login()">
+                    Login
+                </button>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    async function login() {
+
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        const response = await fetch("/api/auth/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username,
+                password
+            })
+        });
+
+        const errorBox = document.getElementById("error");
+
+        if (response.ok) {
+            window.location.href = "/Index";
+        } else {
+            const data = await response.json();
+            errorBox.innerText = data.message || "Login failed";
+            errorBox.classList.remove("d-none");
+        }
+    }
+</script>

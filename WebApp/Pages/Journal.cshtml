@@ -1,0 +1,54 @@
+@page
+@model WebApp.Pages.JournalModel
+@{
+    ViewData["Title"] = "My Journal";
+}
+
+<h1 class="mb-4">My Journal</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Title</th>
+        </tr>
+    </thead>
+    <tbody id="journalTable">
+        <tr><td colspan="2">Loading...</td></tr>
+    </tbody>
+</table>
+
+<script>
+    fetch("/api/journal")
+        .then(res => res.json())
+        .then(data => {
+
+            const table = document.getElementById("journalTable");
+            table.innerHTML = "";
+
+            if (data.length === 0) {
+                table.innerHTML = "<tr><td colspan='2'>No journal entries found</td></tr>";
+                return;
+            }
+
+            data.forEach(entry => {
+                const row = document.createElement("tr");
+
+                row.innerHTML = `
+                    <td>${entry.createdAt.split("T")[0]}</td>
+                    <td>
+                        <a href="/Journal/Details/${entry.id}">
+                            ${entry.title}
+                        </a>
+                    </td>
+                `;
+
+                table.appendChild(row);
+            });
+        })
+        .catch(err => {
+            console.error(err);
+            document.getElementById("journalTable").innerHTML =
+                "<tr><td colspan='2'>Error loading journals</td></tr>";
+        });
+</script>

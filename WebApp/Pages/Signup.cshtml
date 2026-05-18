@@ -1,0 +1,73 @@
+@page
+@model WebApp.Pages.SignupModel
+
+@{
+    ViewData["Title"] = "Sign Up";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-5">
+
+        <h1 class="mb-4">Sign Up</h1>
+
+        <div id="error" class="alert alert-danger d-none"></div>
+        <div id="success" class="alert alert-success d-none"></div>
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+
+                <div class="mb-3">
+                    <label>Username</label>
+                    <input id="username" class="form-control" placeholder="Choose username" />
+                </div>
+
+                <div class="mb-4">
+                    <label>Password</label>
+                    <input id="password" type="password" class="form-control" placeholder="Choose password" />
+                </div>
+
+                <button class="btn btn-success w-100" onclick="signup()">
+                    Create Account
+                </button>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    async function signup() {
+
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        const errorBox = document.getElementById("error");
+        const successBox = document.getElementById("success");
+
+        errorBox.classList.add("d-none");
+        successBox.classList.add("d-none");
+
+        const response = await fetch("/api/auth/signup", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username,
+                password
+            })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            successBox.innerText = "Account created! Redirecting to login...";
+            successBox.classList.remove("d-none");
+
+        } else {
+            errorBox.innerText = data.message || "Signup failed";
+            errorBox.classList.remove("d-none");
+        }
+    }
+</script>

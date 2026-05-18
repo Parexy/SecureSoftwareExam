@@ -1,0 +1,66 @@
+@page
+@model WebApp.Pages.PatientsModel
+
+@{
+    ViewData["Title"] = "Patients";
+}
+
+<h1 class="mb-4">Patients</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>CPR-Number</th>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Phonenumber</th>
+            <th>Email</th>
+            <th>Gender</th>
+            <th>Date of Birth</th>
+        </tr>
+    </thead>
+
+    <tbody id="patientsTable">
+        <tr>
+            <td colspan="8">Loading patients...</td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+    fetch("/api/patients")
+        .then(res => res.json())
+        .then(data => {
+
+            const table = document.getElementById("patientsTable");
+            table.innerHTML = "";
+
+            if (data.length === 0) {
+                table.innerHTML = "<tr><td colspan='8'>No patients found</td></tr>";
+                return;
+            }
+
+            data.forEach(p => {
+                const row = document.createElement("tr");
+
+                row.innerHTML = `
+                    <td>${p.id}</td>
+                    <td>${p.name}</td>
+                    <td>${p.dateOfBirth.split("T")[0]}</td>
+                    <td>${p.cprNumber}</td>
+                    <td>${p.address}</td>
+                    <td>${p.phonenumber}</td>
+                    <td>${p.email}</td>
+                    <td>${p.gender}</td>
+                `;
+
+                table.appendChild(row);
+            });
+        })
+        .catch(err => {
+            console.error(err);
+            document.getElementById("patientsTable").innerHTML =
+                "<tr><td colspan='8'>Error loading patients</td></tr>";
+        });
+</script>

@@ -1,10 +1,23 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<h1 class="mb-4">Patient Journal System</h1>
+
+<div class="row g-3">
+
+    <div class="col-md-4">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5>Journal Entries</h5>
+                <p>Create and view medical notes.</p>
+                <a asp-page="/Journal" class="btn btn-primary btn-sm">
+                    Go to Journal
+                </a>
+            </div>
+        </div>
+    </div>
+
 </div>

@@ -1,0 +1,50 @@
+@page "{id:int}"
+@model WebApp.Pages.Journal.DetailsModel
+@{
+    ViewData["Title"] = "Journal Details";
+}
+
+<h1 id="title">Loading...</h1>
+
+<p><strong>Date:</strong> <span id="date"></span></p>
+
+<hr />
+
+<h4>Notes</h4>
+<p id="notes"></p>
+
+<hr />
+
+<h4>Patient Documents</h4>
+<ul id="documents" class="list-group"></ul>
+
+<script>
+    const id = @Model.Id;
+
+    fetch(`/api/journal/${id}`)
+        .then(res => res.json())
+        .then(data => {
+
+            document.getElementById("title").innerText = data.title;
+            document.getElementById("date").innerText = data.createdAt.split("T")[0];
+            document.getElementById("notes").innerText = data.notes;
+
+            const docList = document.getElementById("documents");
+            docList.innerHTML = "";
+
+            if (data.documents.length === 0) {
+                docList.innerHTML = "<li class='list-group-item'>No documents</li>";
+            } else {
+                data.documents.forEach(d => {
+                    const li = document.createElement("li");
+                    li.className = "list-group-item";
+                    li.innerText = "📄 " + d.fileName;
+                    docList.appendChild(li);
+                });
+            }
+        })
+        .catch(err => {
+            document.getElementById("title").innerText = "Error loading journal";
+            console.error(err);
+        });
+</script>
