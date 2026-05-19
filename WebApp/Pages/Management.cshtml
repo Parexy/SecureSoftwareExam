@@ -15,7 +15,7 @@
 }
 
 <div class="mb-3">
-    <a asp-page="/Admin/Management"
+    <a asp-page="/Management"
            asp-route-view="patients"
            class="btn @(Model.ActiveView == "patients" ? "btn-primary" : "btn-outline-primary")">
         Patients
@@ -23,7 +23,7 @@
 
     @if (Model.IsAdmin)
     {
-        <a asp-page="/Admin/Management"
+        <a asp-page="/Management"
                asp-route-view="staff"
                class="btn @(Model.ActiveView == "staff" ? "btn-primary" : "btn-outline-primary")">
             Staff members

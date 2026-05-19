@@ -5,6 +5,7 @@ using PatientJournal.Core.Interfaces;
 using PatientJournal.Infrastructure;
 using PatientJournal.Infrastructure.Repositories;
 using PatientJournal.Infrastructure.Services;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,7 +44,7 @@ builder.Services
         {
             ValidateAudience = false,
             NameClaimType = "preferred_username",
-            RoleClaimType = "roles"
+            RoleClaimType = ClaimTypes.Role
         };
     });
 
