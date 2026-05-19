@@ -2,7 +2,7 @@ namespace WebApi.DTO;
 
 public class JournalEntryDTO
 {
-
+    public int Id { get; set; }
     public int PatientId { get; set; }
 
     public PatientDTO? Patient { get; set; }
