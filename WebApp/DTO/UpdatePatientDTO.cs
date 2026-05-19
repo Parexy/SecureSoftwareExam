@@ -1,9 +1,7 @@
-namespace WebApi.DTO;
+﻿namespace WebApp.DTO;
 
-public class PatientDTO
+public class UpdatePatientDTO
 {
-    public int Id { get; set; }
-
     public string CPRNumber { get; set; } = string.Empty;
 
     public string Name { get; set; } = string.Empty;

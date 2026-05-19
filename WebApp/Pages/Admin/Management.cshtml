@@ -14,17 +14,30 @@
     </div>
 }
 
+@if (!string.IsNullOrWhiteSpace(Model.SuccessMessage))
+{
+    <div class="alert alert-success">
+        @Model.SuccessMessage
+    </div>
+}
+
+@if (!string.IsNullOrWhiteSpace(Model.TemporaryPassword))
+{
+    <div class="alert alert-warning">
+        Temporary password:
+        <strong>@Model.TemporaryPassword</strong>
+    </div>
+}
+
 <div class="mb-3">
-    <a asp-page="/Management"
-           asp-route-view="patients"
+    <a href="/Admin/Management?view=patients"
            class="btn @(Model.ActiveView == "patients" ? "btn-primary" : "btn-outline-primary")">
         Patients
     </a>
 
     @if (Model.IsAdmin)
     {
-        <a asp-page="/Management"
-               asp-route-view="staff"
+        <a href="/Admin/Management?view=staff"
                class="btn @(Model.ActiveView == "staff" ? "btn-primary" : "btn-outline-primary")">
             Staff members
         </a>
@@ -57,7 +70,7 @@
                     <th>Phone</th>
                     <th>Date of birth</th>
                     <th>Role</th>
-                    <th style="width: 320px;">Actions</th>
+                    <th style="width: 360px;">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -76,17 +89,25 @@
                                 Edit
                             </a>
 
-                            <a asp-page="/StaffMembers/ResetPassword"
-                                   asp-route-id="@staffMember.Id"
-                                   class="btn btn-sm btn-outline-warning">
-                                Reset password
-                            </a>
+                            <form method="post"
+                                  asp-page-handler="ResetStaffPassword"
+                                  asp-route-id="@staffMember.Id"
+                                  class="d-inline"
+                                  onsubmit="return confirm('Reset password for this staff member?');">
+                                <button type="submit" class="btn btn-sm btn-outline-warning">
+                                    Reset password
+                                </button>
+                            </form>
 
-                            <a asp-page="/StaffMembers/Delete"
-                                   asp-route-id="@staffMember.Id"
-                                   class="btn btn-sm btn-outline-danger">
-                                Delete
-                            </a>
+                            <form method="post"
+                                  asp-page-handler="DeleteStaff"
+                                  asp-route-id="@staffMember.Id"
+                                  class="d-inline"
+                                  onsubmit="return confirm('Delete this staff member and the linked Keycloak user?');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                    Delete
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 }
@@ -121,7 +142,7 @@ else
                     <th>Phone</th>
                     <th>Date of birth</th>
                     <th>Gender</th>
-                    <th style="width: 180px;">Actions</th>
+                    <th style="width: 220px;">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -143,11 +164,15 @@ else
 
                             @if (Model.IsAdmin)
                             {
-                                <a asp-page="/Patients/Delete"
-                                       asp-route-id="@patient.Id"
-                                       class="btn btn-sm btn-outline-danger">
-                                    Delete
-                                </a>
+                                <form method="post"
+                                      asp-page-handler="DeletePatient"
+                                      asp-route-id="@patient.Id"
+                                      class="d-inline"
+                                      onsubmit="return confirm('Delete this patient?');">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                        Delete
+                                    </button>
+                                </form>
                             }
                         </td>
                     </tr>

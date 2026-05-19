@@ -43,7 +43,7 @@ public class DbInitializer : IDbInitializer
                 PhoneNumber = "87654321",
                 Email = "nurse@test.dk",
                 DateOfBirth = new DateTime(1990, 1, 1),
-                Role = "Nurse"
+                Role = "Nurse",
             }
         };
 
@@ -59,7 +59,7 @@ public class DbInitializer : IDbInitializer
                 PhoneNumber = "11223344",
                 Email = "patient@test.dk",
                 DateOfBirth = new DateTime(2001, 1, 1),
-                Gender = "Male"
+                Gender = "Male",
             }
         };
 

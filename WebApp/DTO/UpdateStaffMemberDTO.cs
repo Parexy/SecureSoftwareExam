@@ -1,10 +1,8 @@
-namespace WebApi.DTO;
+﻿namespace WebApp.DTO;
 
-public class PatientDTO
+public class UpdateStaffMemberDTO
 {
-    public int Id { get; set; }
-
-    public string CPRNumber { get; set; } = string.Empty;
+    public string Username { get; set; } = string.Empty;
 
     public string Name { get; set; } = string.Empty;
 
@@ -16,7 +14,7 @@ public class PatientDTO
 
     public DateTime DateOfBirth { get; set; }
 
-    public string Gender { get; set; } = string.Empty;
+    public string Role { get; set; } = string.Empty;
 
-    public string ExternalUserId { get; set; } = string.Empty;
+    public bool Enabled { get; set; } = true;
 }

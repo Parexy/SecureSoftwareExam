@@ -54,7 +54,7 @@ builder.Services.AddAuthorization(options =>
         policy.RequireRole("Admin", "Doctor", "Nurse", "Receptionist"));
 
     options.AddPolicy("CanViewOwnPatientProfile", policy =>
-        policy.RequireRole("Patient"));
+        policy.RequireRole("Admin", "Patient"));
 
     options.AddPolicy("CanViewJournalEntries", policy =>
         policy.RequireRole("Admin", "Doctor", "Nurse"));
