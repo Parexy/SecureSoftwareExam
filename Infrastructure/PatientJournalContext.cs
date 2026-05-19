@@ -34,6 +34,12 @@ public class PatientJournalContext : DbContext
             entity.Property(x => x.Name)
                 .IsRequired();
 
+            entity.HasIndex(x => x.ExternalUserId)
+                .IsUnique();
+
+            entity.Property(x => x.ExternalUserId)
+                .IsRequired();
+
             entity.HasMany(x => x.JournalEntries)
                 .WithOne(x => x.Patient)
                 .HasForeignKey(x => x.PatientId)
@@ -53,6 +59,9 @@ public class PatientJournalContext : DbContext
         modelBuilder.Entity<StaffMember>(entity =>
         {
             entity.HasKey(x => x.Id);
+
+            entity.HasIndex(x => x.ExternalUserId)
+                .IsUnique();
 
             entity.Property(x => x.ExternalUserId)
                 .IsRequired();

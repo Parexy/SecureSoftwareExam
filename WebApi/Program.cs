@@ -4,8 +4,23 @@ using Microsoft.IdentityModel.Tokens;
 using PatientJournal.Core.Interfaces;
 using PatientJournal.Infrastructure;
 using PatientJournal.Infrastructure.Repositories;
+using PatientJournal.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowWebApp", policy =>
+    {
+        policy
+            .WithOrigins(
+                "https://localhost:7185",
+                "http://localhost:5149")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
 
 builder.Services.AddControllers();
 
@@ -62,6 +77,8 @@ builder.Services.AddAuthorization(options =>
         policy.RequireRole("Admin"));
 });
 
+builder.Services.AddHttpClient<IKeycloakAdminService, KeycloakAdminService>();
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -76,6 +93,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseRouting();
+
+app.UseCors("AllowWebApp");
 
 app.UseAuthentication();
 app.UseAuthorization();

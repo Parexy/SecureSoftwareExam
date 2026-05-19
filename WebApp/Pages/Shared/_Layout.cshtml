@@ -29,6 +29,16 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Journal">Journal</a>
                         </li>
+
+                        @if (User.Identity?.IsAuthenticated == true &&
+                            (User.IsInRole("Admin") || User.IsInRole("Receptionist")))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-page="/Admin/Management">
+                                    Management
+                                </a>
+                            </li>
+                        }
                     </ul>
 
                     <ul class="navbar-nav ms-auto">

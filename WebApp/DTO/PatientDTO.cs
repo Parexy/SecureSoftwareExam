@@ -1,4 +1,4 @@
-namespace WebApi.DTO;
+﻿namespace WebApp.DTO;
 
 public class PatientDTO
 {
@@ -17,4 +17,6 @@ public class PatientDTO
     public DateTime DateOfBirth { get; set; }
 
     public string Gender { get; set; } = string.Empty;
+
+    public string ExternalUserId { get; set; } = string.Empty;
 }
