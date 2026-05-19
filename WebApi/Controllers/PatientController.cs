@@ -63,7 +63,7 @@ public class PatientController : ControllerBase
     [Authorize(Policy = "CanViewOwnPatientProfile")]
     public async Task<IActionResult> GetMyPatientProfile()
     {
-        var externalUserId = User.FindFirst("sub")?.Value;
+        var externalUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 
         if (string.IsNullOrWhiteSpace(externalUserId))
         {
@@ -76,7 +76,7 @@ public class PatientController : ControllerBase
 
         if (patient == null)
         {
-            return Forbid();
+            return NotFound();
         }
 
         var result = MapToDTO(patient);

@@ -59,6 +59,9 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("CanViewJournalEntries", policy =>
         policy.RequireRole("Admin", "Doctor", "Nurse"));
 
+    options.AddPolicy("CanViewOwnJournalEntries", policy =>
+        policy.RequireRole("Doctor", "Nurse", "Patient"));
+
     options.AddPolicy("CanCreateJournalEntry", policy =>
         policy.RequireRole("Doctor"));
 

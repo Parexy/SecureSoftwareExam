@@ -13,10 +13,13 @@ namespace WebApi.Controllers;
 public class JournalController : ControllerBase
 {
     private readonly IRepository<JournalEntry> journalsRepository;
-
-    public JournalController(IRepository<JournalEntry> journalsRepository)
+    private readonly IRepository<Patient> patientsRepository;
+    private readonly IRepository<StaffMember> staffMembersRepository;
+    public JournalController(IRepository<JournalEntry> journalsRepository, IRepository<Patient> patientsRepository, IRepository<StaffMember> staffMembersRepository)
     {
         this.journalsRepository = journalsRepository;
+        this.patientsRepository = patientsRepository;
+        this.staffMembersRepository = staffMembersRepository;
     }
 
     // GET: api/journal
@@ -32,6 +35,43 @@ public class JournalController : ControllerBase
             PatientId = j.PatientId,
             StaffMemberId = j.StaffMemberId,
         }).ToList();
+
+        return Ok(result);
+    }
+
+    // GET: api/journal/me
+    [HttpGet("me")]
+    [Authorize(Policy = "CanViewOwnJournalEntries")]
+    public async Task<IActionResult> GetMyJournals()
+    {
+        var externalUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+        if (string.IsNullOrWhiteSpace(externalUserId))
+        {
+            return Unauthorized();
+        }
+
+        var patients = await patientsRepository.GetAllAsync();
+        var staffMembers = await staffMembersRepository.GetAllAsync();
+
+        var patient = patients.FirstOrDefault(p => p.ExternalUserId == externalUserId);
+        var staff = staffMembers.FirstOrDefault(s => s.ExternalUserId == externalUserId);
+
+        var journals = await journalsRepository.GetAllAsync();
+
+        var result = journals
+            .Where(j =>
+                (patient != null && j.PatientId == patient.Id) ||
+                (staff != null && j.StaffMemberId == staff.Id)
+            )
+            .Select(j => new JournalEntryDTO
+            {
+                Id = j.Id,
+                CreatedAt = j.CreatedAt,
+                Title = j.Title,
+                Notes = j.Notes,
+            })
+            .ToList();
 
         return Ok(result);
     }

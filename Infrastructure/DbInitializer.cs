@@ -52,6 +52,7 @@ public class DbInitializer : IDbInitializer
             new Patient
             {
                 Id = 1,
+                ExternalUserId = "keycloak-user-patient-1",
                 CPRNumber = "0101011234",
                 Name = "Test Patient",
                 Address = "Patientvej 1",
@@ -71,6 +72,15 @@ public class DbInitializer : IDbInitializer
                 StaffMemberId = 1,
                 Title = "Initial consultation",
                 Notes = "Patient had an initial consultation.",
+                CreatedAt = DateTime.UtcNow
+            },
+            new JournalEntry
+            {
+                Id = 2,
+                PatientId = 1,
+                StaffMemberId = 2,
+                Title = "Second consultation",
+                Notes = "Patient had an second consultation.",
                 CreatedAt = DateTime.UtcNow
             }
         };
